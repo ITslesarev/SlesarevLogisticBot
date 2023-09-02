@@ -1,0 +1,8 @@
+meta:
+  environment: jvm
+  toolchain:
+    name: maven
+    version: 1.8
+
+    run:
+    jarName: C:\Users\Александр Слесарев\IdeaProjects\slesarev-warehouse-logistics-bot-v1\target\slesarev_warehouse_logistics_bot_V1-1.0-SNAPSHOT-jar-with-dependencies.jar
