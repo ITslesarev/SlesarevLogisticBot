@@ -7,8 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.ITslesarev.keyboards.KeyBoardForStorekeeper;
-import ru.ITslesarev.keyboards.StartKeyboard;
+import ru.ITslesarev.keyboards.*;
 
 import java.util.List;
 
@@ -57,12 +56,64 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 } case "/problem":{
                     {
-                        KeyBoardForStorekeeper keyBoardForStorekeeper = new KeyBoardForStorekeeper();
-                        SendMessage sendMsg = keyBoardForStorekeeper.drawKeyBoardForStorekeeper(message, "Cообщите о проблеме");
-                        try{
-                            execute(sendMsg);
-                        }catch (TelegramApiException e){
-                            e.printStackTrace();
+                        DataLogistic dataLogistic = new DataLogistic();
+                        dataLogistic.fillEmployes();
+                        String post = DataLogistic.skladMap.get(message.getChatId().toString());
+                        if (post == null){
+
+                            SendMessage sendMsg = new SendMessage();
+                            sendMsg.setChatId(message.getChatId().toString());
+                            sendMsg.setReplyToMessageId(message.getMessageId());
+                            sendMsg.setText("Сначала выберите должность для начала работы с ботом");
+                            try{
+                                execute(sendMsg);
+                            }catch (TelegramApiException e){
+                                e.printStackTrace();
+                            }
+                        }else {
+                            switch (post) {
+                                case "кладовщик": {
+                                    KeyBoardForStorekeeper keyBoardForStorekeeper = new KeyBoardForStorekeeper();
+                                    SendMessage sendMsg = keyBoardForStorekeeper.drawKeyBoardForStorekeeper(message, "Cообщите о проблеме");
+                                    try {
+                                        execute(sendMsg);
+                                    } catch (TelegramApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+                                case "Карщик/слотчик": {
+                                    KeyBoardForSlot keyBoardForSlot = new KeyBoardForSlot();
+                                    SendMessage sendMsg = keyBoardForSlot.drawKeyBoardForSlot(message, "Сообщите о проблеме");
+                                    try {
+                                        execute(sendMsg);
+                                    } catch (TelegramApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+                                case "Руководитель сектора": {
+                                    KeyBoardForManager keyBoardForManager = new KeyBoardForManager();
+                                    SendMessage sendMsg = keyBoardForManager.drawKeyBoardForManager(message, "Сообщите о проблеме");
+                                    try {
+                                        execute(sendMsg);
+                                    } catch (TelegramApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+                                case "Начальник отдела": {
+
+                                    KeyBoardForChief keyBoardForChief = new KeyBoardForChief();
+                                    SendMessage sendMsg = keyBoardForChief.drawKeyBoardForChief(message, "Сообщите о проблеме");
+                                    try {
+                                        execute(sendMsg);
+                                    } catch (TelegramApiException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     }
                     break;
@@ -83,35 +134,79 @@ public class Bot extends TelegramLongPollingBot {
             String chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
             if (call_data.equals("КЛАДОВЩИК")){
                 DataLogistic dataLogistic = new DataLogistic();
-                dataLogistic.connectToData("кладовщик", chat_id);
-                try{
-                    execute(new SendMessage(chat_id, "Вы кладовщик"));
-                }catch (TelegramApiException e){
-                    e.printStackTrace();
+                dataLogistic.fillEmployes();
+                String post  = DataLogistic.skladMap.get(chat_id);
+                if (post == null)
+                    {
+                        dataLogistic.connectToData("кладовщик", chat_id);
+                        try {
+                            execute(new SendMessage(chat_id, "Вы кладовщик"));
+                        } catch (TelegramApiException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (post != null){
+                    try{
+                        execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
+                    }catch (TelegramApiException e){
+                        e.printStackTrace();
+                    }
                 }
             }else if (call_data.equals("КАРЩИКСЛОТЧИК")){
-                DataLogistic dataLogistic =new DataLogistic();
-                dataLogistic.connectToData("Карщик/слотчик", chat_id);
-                try{
-                    execute(new SendMessage(chat_id, "Вы карщик или слотчик"));
-                }catch (TelegramApiException e){
-                    e.printStackTrace();
+                DataLogistic dataLogistic = new DataLogistic();
+                dataLogistic.fillEmployes();
+                String post  = DataLogistic.skladMap.get(chat_id);
+                if (post == null)
+                {
+                    dataLogistic.connectToData("Карщик/слотчик", chat_id);
+                    try {
+                        execute(new SendMessage(chat_id, "Вы Карщик/слотчик"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                } else if (post != null){
+                    try{
+                        execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
+                    }catch (TelegramApiException e){
+                        e.printStackTrace();
+                    }
                 }
             }else if (call_data.equals("РУКОВОДИТЕЛЬСЕКТОРА")){
-                DataLogistic dataLogistic =new DataLogistic();
-                dataLogistic.connectToData("Руководитель сектора", chat_id);
-                try{
-                    execute(new SendMessage(chat_id, "Вы руководитель сектора"));
-                }catch (TelegramApiException e){
-                    e.printStackTrace();
+                DataLogistic dataLogistic = new DataLogistic();
+                dataLogistic.fillEmployes();
+                String post  = DataLogistic.skladMap.get(chat_id);
+                if (post == null)
+                {
+                    dataLogistic.connectToData("Руководитель сектора", chat_id);
+                    try {
+                        execute(new SendMessage(chat_id, "Вы руководитель сектора"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                } else if (post != null){
+                    try{
+                        execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
+                    }catch (TelegramApiException e){
+                        e.printStackTrace();
+                    }
                 }
             }else if (call_data.equals("НАЧАЛЬНИКОТДЕЛА")){
-                DataLogistic dataLogistic =new DataLogistic();
-                dataLogistic.connectToData("Начальник отдела", chat_id);
-                try{
-                    execute(new SendMessage(chat_id, "Вы начальник отдела"));
-                }catch (TelegramApiException e){
-                    e.printStackTrace();
+                DataLogistic dataLogistic = new DataLogistic();
+                dataLogistic.fillEmployes();
+                String post  = DataLogistic.skladMap.get(chat_id);
+                if (post == null)
+                {
+                    dataLogistic.connectToData("Начальник отдела", chat_id);
+                    try {
+                        execute(new SendMessage(chat_id, "Вы начальник отдела"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                } else if (post != null){
+                    try{
+                        execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
+                    }catch (TelegramApiException e){
+                        e.printStackTrace();
+                    }
                 }
             }else if (call_data.equals("ПРОПУСК")){
                 DataLogistic dataLogistic = new DataLogistic();

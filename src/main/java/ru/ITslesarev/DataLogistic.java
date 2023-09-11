@@ -10,8 +10,9 @@ import java.util.Map;
 
 
 public class DataLogistic {
-    static HashMap<String, String> skladMap = new HashMap<>();
+    public static HashMap<String, String> skladMap = new HashMap<>();
     public void connectToData(String position, String number_id) {
+        fillEmployes();
         if (!(skladMap.containsKey(number_id)))
         {
             String url = "jdbc:mysql://localhost:3306/logistic";

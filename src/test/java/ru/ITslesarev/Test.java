@@ -9,7 +9,7 @@ public class Test {
         DataLogistic dataLogistic =  new DataLogistic();
         dataLogistic.fillEmployes();
         String str = "Карщик/слотчик";
-        for (Map.Entry<String,String> entry : dataLogistic.skladMap.entrySet()){
+        for (Map.Entry<String,String> entry : DataLogistic.skladMap.entrySet()){
             if(str.equals(entry.getValue())){
                 System.out.println(entry.getKey());
             }
