@@ -8,7 +8,11 @@ import java.util.Map;
 
 
 
-
+/**
+ * SlesarevLogisticBot 1.0
+ *
+ * @author Александр Слесарев
+ * */
 public class DataLogistic {
     public static HashMap<String, String> skladMap = new HashMap<>();
     public void connectToData(String position, String number_id) {
@@ -31,10 +35,11 @@ public class DataLogistic {
             sqlException.printStackTrace();
 
         }
-    }else {
-            System.out.println("Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела");
-        }
     }
+    }
+    /**
+     * This method fills the map with users from the database
+     * */
     public void fillEmployes (){
         String url = "jdbc:mysql://localhost:3306/logistic";
         String userName = getMySQLUserName();
@@ -58,6 +63,9 @@ public class DataLogistic {
             sqlException.printStackTrace();
         }
     }
+    /**
+     * This method sends text messages to specific users
+     * */
     public List<String> callFor(String position){
         DataLogistic dataLogistic =  new DataLogistic();
         dataLogistic.fillEmployes();
@@ -69,6 +77,9 @@ public class DataLogistic {
         }
         return listPosition;
     }
+    /**
+     * This method sends text messages to specific users
+     * */
     public List<String> callFor(String position, String position2){
         DataLogistic dataLogistic = new DataLogistic();
         dataLogistic.fillEmployes();
@@ -80,10 +91,6 @@ public class DataLogistic {
                 listPosition.add(entry.getKey());
             }
         }return listPosition;
-    }
-
-    public void drawKeybordForPosition () {
-
     }
 
     public String getMySQLUserName () {

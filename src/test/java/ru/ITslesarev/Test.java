@@ -3,6 +3,15 @@ package ru.ITslesarev;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Map;
+/**
+ * SlesarevLogisticBot 1.0
+ *
+ * @author Александр Слесарев
+ * */
+
+/**
+ * Getting a key by value
+ * */
 
 public class Test {
     public static void main(String[] args) {

@@ -42,21 +42,6 @@
   <build>
     <plugins>
 
-
-
-      <!--<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
-        <configuration>
-          <archive>
-            <manifestFile>C:/Users/Александр Слесарев/IdeaProjects/slesarev-warehouse-logistics-bot-v1/manifest.txt</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>-->
-
-
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -65,7 +50,6 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
-
       </plugin>
 
       <plugin>

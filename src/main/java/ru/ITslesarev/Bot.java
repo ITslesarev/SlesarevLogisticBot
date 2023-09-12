@@ -11,6 +11,12 @@ import ru.ITslesarev.keyboards.*;
 
 import java.util.List;
 
+/**
+ * SlesarevLogisticBot 1.0
+ *
+ * @author Александр Слесарев
+ * */
+
 public class Bot extends TelegramLongPollingBot {
     public static void main(String[] args) throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
@@ -23,6 +29,8 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
+            MyBot myBot = new MyBot();
+            String chat_id = message.getChatId().toString();
             switch (message.getText()){
                 case "/start": {
                     StartKeyboard startKeyboard = new StartKeyboard();
@@ -31,46 +39,32 @@ public class Bot extends TelegramLongPollingBot {
                         execute(sendMsg);
                     }catch (TelegramApiException e){
                         e.printStackTrace();
-                    }break;
-                } case "/help": {
-                    SendMessage sendMsg = new SendMessage();
-                    sendMsg.setChatId(message.getChatId().toString());
-                    sendMsg.setReplyToMessageId(message.getMessageId());
-                    sendMsg.setText("/help помощь\n/start выбрать должность\n/settings настройки\n/problem сообщить о проблеме");
-                    try{
-                        execute(sendMsg);
-                    }catch (TelegramApiException e){
-                        e.printStackTrace();
                     }
                     break;
+                } case "/help": {
+                    myBot.sendTextMessage(chat_id, "/help помощь\n/start выбрать должность\n/settings настройки\n/problem сообщить о проблеме");
+                    break;
+                    /**
+                     * This will be implemented in the following versions
+                     */
                 } case "/settings":{
-                    SendMessage sendMsg = new SendMessage();
-                    sendMsg.setChatId(message.getChatId().toString());
-                    sendMsg.setReplyToMessageId(message.getMessageId());
-                    sendMsg.setText("Cкоро здесь будет новая функциональность");
-                    try{
-                        execute(sendMsg);
-                    }catch (TelegramApiException e){
-                        e.printStackTrace();
-                    }
+                    myBot.sendTextMessage(chat_id, "Cкоро здесь будет новая функциональность");
                     break;
                 } case "/problem":{
                     {
                         DataLogistic dataLogistic = new DataLogistic();
                         dataLogistic.fillEmployes();
                         String post = DataLogistic.skladMap.get(message.getChatId().toString());
+                        /**
+                         * checking the presence of a user in the database
+                         * */
                         if (post == null){
-
-                            SendMessage sendMsg = new SendMessage();
-                            sendMsg.setChatId(message.getChatId().toString());
-                            sendMsg.setReplyToMessageId(message.getMessageId());
-                            sendMsg.setText("Сначала выберите должность для начала работы с ботом");
-                            try{
-                                execute(sendMsg);
-                            }catch (TelegramApiException e){
-                                e.printStackTrace();
-                            }
-                        }else {
+                            myBot.sendTextMessage(chat_id, "Сначала выберите должность для начала работы с ботом");
+                        }
+                        /**
+                         * drawing the keyboard for different positions
+                         * */
+                        else {
                             switch (post) {
                                 case "кладовщик": {
                                     KeyBoardForStorekeeper keyBoardForStorekeeper = new KeyBoardForStorekeeper();
@@ -119,16 +113,11 @@ public class Bot extends TelegramLongPollingBot {
                     break;
                 }
                 default:
-                    SendMessage sendMsg = new SendMessage();
-                    sendMsg.setChatId(message.getChatId().toString());
-                    sendMsg.setReplyToMessageId(message.getMessageId());
-                    sendMsg.setText("Воспользуйтесь командами из списка:\n/help помощь\n/start выбрать должность\n/settings настройки\n/problem сообщить о проблеме");
-                    try{
-                        execute(sendMsg);
-                    }catch (TelegramApiException e){
-                        e.printStackTrace();
-                    }
+                    myBot.sendTextMessage(chat_id, "Воспользуйтесь командами из списка:\n/help помощь\n/start выбрать должность\n/settings настройки\n/problem сообщить о проблеме");
             }
+            /**
+             *listening to callbacks
+             * */
         }else if (update.hasCallbackQuery()){
             String call_data = update.getCallbackQuery().getData();
             String chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
@@ -144,6 +133,9 @@ public class Bot extends TelegramLongPollingBot {
                         } catch (TelegramApiException e) {
                             e.printStackTrace();
                         }
+                        /**
+                         * Re-selecting a position
+                         * */
                     } else if (post != null){
                     try{
                         execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
@@ -282,8 +274,13 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                 }
+                /**
+                 * This will be implemented in the following versions
+                 */
             }else if (call_data.equals("КНОПКА3ОТРУКОВОДИТЕЛЯ")){
-
+                /**
+                 * This will be implemented in the following versions
+                 */
             }else if (call_data.equals("КНОПКА4ОТРУКОВОДИТЕЛЯ")){
 
             }else if (call_data.equals("СОБРАНИЕНАЧА")){
@@ -306,8 +303,13 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                 }
+                /**
+                 * This will be implemented in the following versions
+                 */
             }else if (call_data.equals("КНОПКА3ОТНАЧАЛЬНИКА")){
-
+                /**
+                 * This will be implemented in the following versions
+                 */
             }else if (call_data.equals("КНОПКА4ОТНАЧАЛЬНИКА")){
 
             }

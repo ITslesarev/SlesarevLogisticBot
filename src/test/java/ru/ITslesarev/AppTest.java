@@ -7,6 +7,11 @@ import junit.framework.TestSuite;
 /**
  * Unit test for simple App.
  */
+/**
+ * SlesarevLogisticBot 1.0
+ *
+ * @author Александр Слесарев
+ * */
 public class AppTest 
     extends TestCase
 {

@@ -7,7 +7,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * SlesarevLogisticBot 1.0
+ *
+ * @author Александр Слесарев
+ * */
 public class KeyBoardForChief {
     public SendMessage drawKeyBoardForChief (Message message, String text) {
         SendMessage sendMessage = new SendMessage();
