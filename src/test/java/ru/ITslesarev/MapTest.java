@@ -3,7 +3,9 @@ package ru.ITslesarev;
  * SlesarevLogisticBot 1.0
  *
  * @author Александр Слесарев
- * */
+ */
+
+import ru.ITslesarev.model.DataLogistic;
 
 /**
  * unloading from the database

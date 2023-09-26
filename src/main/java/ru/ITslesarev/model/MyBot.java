@@ -1,14 +1,15 @@
-package ru.ITslesarev;
+package ru.ITslesarev.model;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.ITslesarev.Bot;
 /**
  * SlesarevLogisticBot 1.0
  *
  * @author Александр Слесарев
- * */
+ */
 
 /**
  * The code for sending messages from the main class is placed in this class
