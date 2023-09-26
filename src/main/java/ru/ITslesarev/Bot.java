@@ -15,42 +15,46 @@ import java.util.List;
  * SlesarevLogisticBot 1.0
  *
  * @author Александр Слесарев
- * */
+ */
 
 public class Bot extends TelegramLongPollingBot {
     public static void main(String[] args) throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        try{
+        try {
             telegramBotsApi.registerBot(new Bot());
-        } catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
+
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
             MyBot myBot = new MyBot();
             String chat_id = message.getChatId().toString();
-            switch (message.getText()){
+            switch (message.getText()) {
                 case "/start": {
                     StartKeyboard startKeyboard = new StartKeyboard();
                     SendMessage sendMsg = startKeyboard.sendStartMessage(message, "Здравствуйте, на какой должности вы трудитесь?");
-                    try{
+                    try {
                         execute(sendMsg);
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                     break;
-                } case "/help": {
+                }
+                case "/help": {
                     myBot.sendTextMessage(chat_id, "/help помощь\n/start выбрать должность\n/settings настройки\n/problem сообщить о проблеме");
                     break;
                     /**
                      * This will be implemented in the following versions
                      */
-                } case "/settings":{
+                }
+                case "/settings": {
                     myBot.sendTextMessage(chat_id, "Cкоро здесь будет новая функциональность");
                     break;
-                } case "/problem":{
+                }
+                case "/problem": {
                     {
                         DataLogistic dataLogistic = new DataLogistic();
                         dataLogistic.fillEmployes();
@@ -58,7 +62,7 @@ public class Bot extends TelegramLongPollingBot {
                         /**
                          * checking the presence of a user in the database
                          * */
-                        if (post == null){
+                        if (post == null) {
                             myBot.sendTextMessage(chat_id, "Сначала выберите должность для начала работы с ботом");
                         }
                         /**
@@ -118,199 +122,195 @@ public class Bot extends TelegramLongPollingBot {
             /**
              *listening to callbacks
              * */
-        }else if (update.hasCallbackQuery()){
+        } else if (update.hasCallbackQuery()) {
             String call_data = update.getCallbackQuery().getData();
             String chat_id = update.getCallbackQuery().getMessage().getChatId().toString();
-            if (call_data.equals("КЛАДОВЩИК")){
+            if (call_data.equals("КЛАДОВЩИК")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 dataLogistic.fillEmployes();
-                String post  = DataLogistic.skladMap.get(chat_id);
-                if (post == null)
-                    {
-                        dataLogistic.connectToData("кладовщик", chat_id);
-                        try {
-                            execute(new SendMessage(chat_id, "Вы кладовщик"));
-                        } catch (TelegramApiException e) {
-                            e.printStackTrace();
-                        }
-                        /**
-                         * Re-selecting a position
-                         * */
-                    } else if (post != null){
-                    try{
+                String post = DataLogistic.skladMap.get(chat_id);
+                if (post == null) {
+                    dataLogistic.connectToData("кладовщик", chat_id);
+                    try {
+                        execute(new SendMessage(chat_id, "Вы кладовщик"));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                    /**
+                     * Re-selecting a position
+                     * */
+                } else if (post != null) {
+                    try {
                         execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("КАРЩИКСЛОТЧИК")){
+            } else if (call_data.equals("КАРЩИКСЛОТЧИК")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 dataLogistic.fillEmployes();
-                String post  = DataLogistic.skladMap.get(chat_id);
-                if (post == null)
-                {
+                String post = DataLogistic.skladMap.get(chat_id);
+                if (post == null) {
                     dataLogistic.connectToData("Карщик/слотчик", chat_id);
                     try {
                         execute(new SendMessage(chat_id, "Вы Карщик/слотчик"));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                } else if (post != null){
-                    try{
+                } else if (post != null) {
+                    try {
                         execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("РУКОВОДИТЕЛЬСЕКТОРА")){
+            } else if (call_data.equals("РУКОВОДИТЕЛЬСЕКТОРА")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 dataLogistic.fillEmployes();
-                String post  = DataLogistic.skladMap.get(chat_id);
-                if (post == null)
-                {
+                String post = DataLogistic.skladMap.get(chat_id);
+                if (post == null) {
                     dataLogistic.connectToData("Руководитель сектора", chat_id);
                     try {
                         execute(new SendMessage(chat_id, "Вы руководитель сектора"));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                } else if (post != null){
-                    try{
+                } else if (post != null) {
+                    try {
                         execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("НАЧАЛЬНИКОТДЕЛА")){
+            } else if (call_data.equals("НАЧАЛЬНИКОТДЕЛА")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 dataLogistic.fillEmployes();
-                String post  = DataLogistic.skladMap.get(chat_id);
-                if (post == null)
-                {
+                String post = DataLogistic.skladMap.get(chat_id);
+                if (post == null) {
                     dataLogistic.connectToData("Начальник отдела", chat_id);
                     try {
                         execute(new SendMessage(chat_id, "Вы начальник отдела"));
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
-                } else if (post != null){
-                    try{
+                } else if (post != null) {
+                    try {
                         execute(new SendMessage(chat_id, "Нельзя повторно сохранить должность в базу данных. Обратитесь к начальнику отдела"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ПРОПУСК")){
+            } else if (call_data.equals("ПРОПУСК")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 List<String> list = dataLogistic.callFor("Карщик/слотчик");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "У вас пропуск. Пополните товар"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ПРИНТЕР")){
+            } else if (call_data.equals("ПРИНТЕР")) {
                 DataLogistic dataLogistic = new DataLogistic();
-                List<String> list = dataLogistic.callFor("Руководитель сектора","Начальник отдела");
+                List<String> list = dataLogistic.callFor("Руководитель сектора", "Начальник отдела");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Требуется починка принтера"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ПОДДОНБАФФЕР")){
+            } else if (call_data.equals("ПОДДОНБАФФЕР")) {
                 DataLogistic dataLogistic = new DataLogistic();
-                List<String> list = dataLogistic.callFor("Руководитель сектора","Начальник отдела");
+                List<String> list = dataLogistic.callFor("Руководитель сектора", "Начальник отдела");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Заваленный поддон"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("АЛКОБЛОК")){
+            } else if (call_data.equals("АЛКОБЛОК")) {
                 DataLogistic dataLogistic = new DataLogistic();
-                List<String> list = dataLogistic.callFor("Руководитель сектора","Начальник отдела");
+                List<String> list = dataLogistic.callFor("Руководитель сектора", "Начальник отдела");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Блокировка алкоголя"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ПЕРЕСОРТ")){
+            } else if (call_data.equals("ПЕРЕСОРТ")) {
                 DataLogistic dataLogistic = new DataLogistic();
-                List<String> list = dataLogistic.callFor("Руководитель сектора","Начальник отдела");
+                List<String> list = dataLogistic.callFor("Руководитель сектора", "Начальник отдела");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Пересорт на слоту"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("КНОПКА3ОТСЛОТЧИКА")){
+            } else if (call_data.equals("КНОПКА3ОТСЛОТЧИКА")) {
 
-            }else if (call_data.equals("КНОПКА4ОТСЛОТЧИКА")){
+            } else if (call_data.equals("КНОПКА4ОТСЛОТЧИКА")) {
 
-            }else if (call_data.equals("СОБРАНИЕ")){
+            } else if (call_data.equals("СОБРАНИЕ")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 List<String> list = dataLogistic.callFor("кладовщик");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Собрание в 00:45"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ЗАДЕРЖКА")){
+            } else if (call_data.equals("ЗАДЕРЖКА")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 List<String> list = dataLogistic.callFor("кладовщик", "Карщик/слотчик");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Необходимо задержаться, чтобы собрать весь объём"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
                 /**
                  * This will be implemented in the following versions
                  */
-            }else if (call_data.equals("КНОПКА3ОТРУКОВОДИТЕЛЯ")){
+            } else if (call_data.equals("КНОПКА3ОТРУКОВОДИТЕЛЯ")) {
                 /**
                  * This will be implemented in the following versions
                  */
-            }else if (call_data.equals("КНОПКА4ОТРУКОВОДИТЕЛЯ")){
+            } else if (call_data.equals("КНОПКА4ОТРУКОВОДИТЕЛЯ")) {
 
-            }else if (call_data.equals("СОБРАНИЕНАЧА")){
+            } else if (call_data.equals("СОБРАНИЕНАЧА")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 List<String> list = dataLogistic.callFor("кладовщик", "Карщик/слотчик");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Собрание в 00:45"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
-            }else if (call_data.equals("ЗАДЕРЖКАНАЧА")){
+            } else if (call_data.equals("ЗАДЕРЖКАНАЧА")) {
                 DataLogistic dataLogistic = new DataLogistic();
                 List<String> list = dataLogistic.callFor("кладовщик", "Карщик/слотчик");
                 for (String str : list) {
-                    try{
+                    try {
                         execute(new SendMessage(str, "Необходимо задержаться, чтобы собрать весь объём"));
-                    }catch (TelegramApiException e){
+                    } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 }
                 /**
                  * This will be implemented in the following versions
                  */
-            }else if (call_data.equals("КНОПКА3ОТНАЧАЛЬНИКА")){
+            } else if (call_data.equals("КНОПКА3ОТНАЧАЛЬНИКА")) {
                 /**
                  * This will be implemented in the following versions
                  */
-            }else if (call_data.equals("КНОПКА4ОТНАЧАЛЬНИКА")){
+            } else if (call_data.equals("КНОПКА4ОТНАЧАЛЬНИКА")) {
 
             }
         }

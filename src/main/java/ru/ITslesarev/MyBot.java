@@ -8,7 +8,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
  * SlesarevLogisticBot 1.0
  *
  * @author Александр Слесарев
- * */
+ */
 
 /**
  * The code for sending messages from the main class is placed in this class
